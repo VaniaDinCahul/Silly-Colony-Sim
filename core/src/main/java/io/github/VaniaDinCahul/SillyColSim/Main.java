@@ -1,6 +1,8 @@
 package io.github.VaniaDinCahul.SillyColSim;
 
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -24,8 +26,8 @@ public class Main implements ApplicationListener {
     public void create() {
         // Prepare your application here.
 
-        cameraSpeed = 1f;
-        cameraZoom = 1f;
+        cameraSpeed = 24f;
+        cameraZoom = 4f;
         TILE_WIDTH = 128f;
         TILE_HEIGHT = 64f;
 
@@ -48,7 +50,9 @@ public class Main implements ApplicationListener {
     @Override
     public void render(){
 
+        update(Gdx.graphics.getDeltaTime());
         draw();
+
     }
 
     @Override
@@ -68,7 +72,20 @@ public class Main implements ApplicationListener {
     }
 
     public void update(float delta){
+        if (Gdx.input.isKeyPressed(Input.Keys.A)){
+            viewport.position.x -= cameraSpeed * delta;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.D)){
+            viewport.position.x += cameraSpeed * delta;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.W)){
+            viewport.position.y += cameraSpeed * delta;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.S)){
+            viewport.position.y -= cameraSpeed * delta;
+        }
 
+        viewport.update();
     }
 
     public void draw(){
@@ -78,7 +95,15 @@ public class Main implements ApplicationListener {
 
         spriteBatch.begin();
 
-        spriteBatch.draw(groundTexture, 1, 1, 1, 1);
+        for (int x = 0; x < 120; x++) {
+            for (int y = 0; y < 120; y++) {
+
+                float screenX = (x-y) * cameraZoom;
+                float screenY = (x+y) * cameraZoom/2f;
+
+                spriteBatch.draw(groundTexture,screenX ,screenY, cameraZoom*2f, cameraZoom);
+            }
+        }
 
         spriteBatch.end();
     }
