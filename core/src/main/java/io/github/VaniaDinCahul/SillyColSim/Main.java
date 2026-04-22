@@ -2,7 +2,6 @@ package io.github.VaniaDinCahul.SillyColSim;
 
 import com.badlogic.gdx.ApplicationListener;
 
-/** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main implements ApplicationListener {
     @Override
     public void create() {
