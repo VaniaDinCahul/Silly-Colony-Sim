@@ -1,11 +1,30 @@
 package io.github.VaniaDinCahul.SillyColSim;
 
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.ScreenUtils;
 
 public class Main implements ApplicationListener {
+
+    SpriteBatch spriteBatch;
+    OrthographicCamera viewport;
+
+    Texture groundTexture;
+
+
     @Override
     public void create() {
         // Prepare your application here.
+
+        groundTexture = new Texture("forest/ForestSoil.png");
+        spriteBatch = new SpriteBatch();
+        viewport = new OrthographicCamera();
+
+
+        viewport.update();
     }
 
     @Override
@@ -20,6 +39,14 @@ public class Main implements ApplicationListener {
     @Override
     public void render() {
         // Draw your application here.
+        ScreenUtils.clear(new Color(0.47f, 0.6f, 0.64f, 1f));
+        spriteBatch.setProjectionMatrix(viewport.combined);
+
+        spriteBatch.begin();
+
+        spriteBatch.draw(groundTexture, 1, 1, 1, 1);
+        viewport.update();
+        spriteBatch.end();
     }
 
     @Override
@@ -35,5 +62,6 @@ public class Main implements ApplicationListener {
     @Override
     public void dispose() {
         // Destroy application's resources here.
+        spriteBatch.dispose();
     }
 }
