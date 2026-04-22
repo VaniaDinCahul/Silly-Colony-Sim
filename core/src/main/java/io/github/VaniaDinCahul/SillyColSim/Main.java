@@ -14,15 +14,24 @@ public class Main implements ApplicationListener {
 
     Texture groundTexture;
 
+    float cameraSpeed;
+    float cameraZoom;
+    float TILE_WIDTH;
+    float TILE_HEIGHT
+
 
     @Override
     public void create() {
         // Prepare your application here.
 
+        cameraSpeed = 1f;
+        cameraZoom = 1f;
+        TILE_WIDTH = 128f;
+        TILE_HEIGHT = 64f;
+
         groundTexture = new Texture("forest/ForestSoil.png");
         spriteBatch = new SpriteBatch();
-        viewport = new OrthographicCamera();
-
+        viewport = new OrthographicCamera(16, 16);
 
         viewport.update();
     }
@@ -37,16 +46,9 @@ public class Main implements ApplicationListener {
     }
 
     @Override
-    public void render() {
-        // Draw your application here.
-        ScreenUtils.clear(new Color(0.47f, 0.6f, 0.64f, 1f));
-        spriteBatch.setProjectionMatrix(viewport.combined);
+    public void render(){
 
-        spriteBatch.begin();
-
-        spriteBatch.draw(groundTexture, 1, 1, 1, 1);
-        viewport.update();
-        spriteBatch.end();
+        draw();
     }
 
     @Override
@@ -63,5 +65,21 @@ public class Main implements ApplicationListener {
     public void dispose() {
         // Destroy application's resources here.
         spriteBatch.dispose();
+    }
+
+    public void update(float delta){
+
+    }
+
+    public void draw(){
+        ScreenUtils.clear(new Color(0.47f, 0.6f, 0.64f, 1f));
+        spriteBatch.setProjectionMatrix(viewport.combined);
+
+
+        spriteBatch.begin();
+
+        spriteBatch.draw(groundTexture, 1, 1, 1, 1);
+
+        spriteBatch.end();
     }
 }
