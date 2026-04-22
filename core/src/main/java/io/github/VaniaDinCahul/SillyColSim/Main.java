@@ -17,7 +17,7 @@ public class Main implements ApplicationListener {
     float cameraSpeed;
     float cameraZoom;
     float TILE_WIDTH;
-    float TILE_HEIGHT
+    float TILE_HEIGHT;
 
 
     @Override
