@@ -1,4 +1,4 @@
-package io.github.VaniaDinCahul.SillyColSim;
+package io.github.VaniaDinCahul.SillyColSim.map_handler;
 
 public class ResourceNode {
     private String resourceName;
