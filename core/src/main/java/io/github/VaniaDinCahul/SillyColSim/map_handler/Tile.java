@@ -11,5 +11,7 @@ public class Tile{
         this.stats = setTileStats;
     }
 
-
+    public TileStats getStats() {
+        return this.stats;
+    }
 }

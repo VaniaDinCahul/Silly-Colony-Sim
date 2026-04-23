@@ -8,8 +8,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
+import io.github.VaniaDinCahul.SillyColSim.map_handler.MapHandler;
 
 public class Main implements ApplicationListener {
+
+    MapHandler mapManager;
 
     SpriteBatch spriteBatch;
     OrthographicCamera viewport;
@@ -21,10 +24,14 @@ public class Main implements ApplicationListener {
     float TILE_WIDTH;
     float TILE_HEIGHT;
 
+    public final int MAP_WIDTH = 120;
+    public final int MAP_HEIGHT = 120;
 
     @Override
     public void create() {
         // Prepare your application here.
+        mapManager = new MapHandler();
+
 
         cameraSpeed = 24f;
         cameraZoom = 4f;
