@@ -18,6 +18,7 @@ public class Main implements ApplicationListener {
     OrthographicCamera viewport;
 
     Texture groundTexture;
+    Texture wallTexture;
 
     float cameraSpeed;
     float cameraZoom;
@@ -38,7 +39,8 @@ public class Main implements ApplicationListener {
         TILE_WIDTH = 128f;
         TILE_HEIGHT = 64f;
 
-        groundTexture = new Texture("forest/ForestSoil.png");
+        groundTexture = new Texture("BlankTile.png");
+        wallTexture = new Texture("BlankTile.png");
         spriteBatch = new SpriteBatch();
         viewport = new OrthographicCamera(16, 16);
 
