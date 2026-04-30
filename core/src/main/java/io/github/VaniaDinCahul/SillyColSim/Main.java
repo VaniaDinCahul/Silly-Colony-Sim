@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import io.github.VaniaDinCahul.SillyColSim.map_handler.MapHandler;
 import io.github.VaniaDinCahul.SillyColSim.map_handler.Tile;
+import org.w3c.dom.Text;
 
 public class Main implements ApplicationListener {
 
@@ -22,6 +23,8 @@ public class Main implements ApplicationListener {
 
     Texture groundTexture;
     Texture wallTexture;
+    Texture rockTexture;
+    Texture waterTexture;
 
     float cameraSpeed;
     float cameraZoom;
@@ -41,11 +44,13 @@ public class Main implements ApplicationListener {
 
 
         cameraSpeed = 24f;
-        cameraZoom = 4f;
+        cameraZoom = 0.2f;
         TILE_WIDTH = 128f;
         TILE_HEIGHT = 64f;
 
-        groundTexture = new Texture("BlankTile.png");
+        groundTexture = new Texture("forest/ForestSoil.png");
+        waterTexture = new Texture("water/Water.png");
+        rockTexture = new Texture("rock/Rock.png");
         wallTexture = new Texture("BlankTile.png");
         spriteBatch = new SpriteBatch();
         viewport = new OrthographicCamera(16, 16);
@@ -116,9 +121,20 @@ public class Main implements ApplicationListener {
                 float screenX = (x-y) * cameraZoom;
                 float screenY = (x+y) * cameraZoom/2f;
 
-                spriteBatch.draw(groundTexture,screenX ,screenY, cameraZoom*2f, cameraZoom);
+                float TileHeight = gameMap[x][y].getStats().getTileHeight();
 
-                System.out.println(gameMap[x][y].getStats().getTileHeight());
+                if (TileHeight == 0) {
+                    spriteBatch.draw(waterTexture,screenX ,screenY, cameraZoom*2f, cameraZoom);
+                }
+                if (TileHeight == 1) {
+                    spriteBatch.draw(groundTexture,screenX ,screenY, cameraZoom*2f, cameraZoom);
+                }
+                if (TileHeight == 2) {
+                    spriteBatch.draw(rockTexture,screenX ,screenY, cameraZoom*2f, cameraZoom);
+                }
+
+
+//                System.out.println(gameMap[x][y].getStats().getTileHeight());
             }
         }
 

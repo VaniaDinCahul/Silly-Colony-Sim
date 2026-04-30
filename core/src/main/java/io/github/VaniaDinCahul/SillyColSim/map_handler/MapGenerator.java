@@ -13,7 +13,7 @@ public class MapGenerator {
 
 
     public MapGenerator() {
-        this.noise = new FastNoiseLite();
+        this.noise = new FastNoiseLite((int)(Math.random() * 1000));
 
     }
 
@@ -26,7 +26,17 @@ public class MapGenerator {
         {
             for (int y = 0; y < 120; y++)
             {
-                tempMap[x][y] = noise.GetNoise(x, y);
+                if (noise.GetNoise(x, y) >= 0.9) {
+                    tempMap[x][y] = 2;
+                }
+
+                if (noise.GetNoise(x, y) > 0.3 && noise.GetNoise(x, y) < 0.9) {
+                    tempMap[x][y] = 1;
+                }
+
+                if (noise.GetNoise(x, y) <= 0.3) {
+                    tempMap[x][y] = 0;
+                }
             }
         }
 
