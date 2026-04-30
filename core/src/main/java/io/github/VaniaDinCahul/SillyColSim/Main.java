@@ -9,8 +9,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import io.github.VaniaDinCahul.SillyColSim.map_handler.MapHandler;
+import io.github.VaniaDinCahul.SillyColSim.map_handler.Tile;
 
 public class Main implements ApplicationListener {
+
+    Tile[][] gameMap;
 
     MapHandler mapManager;
 
@@ -32,6 +35,9 @@ public class Main implements ApplicationListener {
     public void create() {
         // Prepare your application here.
         mapManager = new MapHandler();
+
+        mapManager.generateMap();
+        gameMap = mapManager.getMap();
 
 
         cameraSpeed = 24f;
@@ -111,6 +117,8 @@ public class Main implements ApplicationListener {
                 float screenY = (x+y) * cameraZoom/2f;
 
                 spriteBatch.draw(groundTexture,screenX ,screenY, cameraZoom*2f, cameraZoom);
+
+                System.out.println(gameMap[x][y].getStats().getTileHeight());
             }
         }
 

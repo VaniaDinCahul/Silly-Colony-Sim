@@ -10,19 +10,21 @@ public class MapHandler {
     public MapHandler(){
         // generate some randomness for map gen
 
-        this.map = mapGenerator.generateMap(120, 120);
+    }
 
+    public void generateMap() {
+        this.map = this.mapGenerator.generateMap(120, 120);
     }
 
     public Tile[][] getMap(){
-        return map;
+        return this.map;
     }
 
     public Tile getTile(int x, int y) {
-        return map[x][y];
+        return this.map[x][y];
     }
 
     public TileStats getTileStats(int x, int y) {
-        return map[x][y].getStats();
+        return this.map[x][y].getStats();
     }
 }
