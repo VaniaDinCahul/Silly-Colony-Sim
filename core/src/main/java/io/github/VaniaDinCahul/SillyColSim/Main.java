@@ -2,15 +2,14 @@ package io.github.VaniaDinCahul.SillyColSim;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import io.github.VaniaDinCahul.SillyColSim.map_handler.MapHandler;
+import io.github.VaniaDinCahul.SillyColSim.map_handler.ResourceNode;
 import io.github.VaniaDinCahul.SillyColSim.map_handler.Tile;
-import org.w3c.dom.Text;
 
 public class Main implements ApplicationListener {
 
@@ -20,40 +19,51 @@ public class Main implements ApplicationListener {
 
     SpriteBatch spriteBatch;
     OrthographicCamera viewport;
+    CameraHandler cameraManager;
 
     Texture groundTexture;
     Texture wallTexture;
     Texture rockTexture;
     Texture waterTexture;
+    Texture coalDebugTexture;
+    Texture copperDebugTexture;
 
-    float cameraSpeed;
-    float cameraZoom;
-    float TILE_WIDTH;
-    float TILE_HEIGHT;
+    public final float TILE_W = 2f;
+    public final float TILE_H = 1f;
+    public final float VIEWPORT_W = 16f;
+    public final float VIEWPORT_H = 16f;
 
-    public final int MAP_WIDTH = 120;
-    public final int MAP_HEIGHT = 120;
+    public boolean RESOURCE_DEBUG_TOGGLE;
 
     @Override
     public void create() {
         // Prepare your application here.
+
+        //GDX feature thingy idk
+        spriteBatch = new SpriteBatch();
+        viewport = new OrthographicCamera(VIEWPORT_W, VIEWPORT_H);
+
+        // Game Managers/Handlers
         mapManager = new MapHandler();
+        cameraManager = new CameraHandler(viewport);
 
-        mapManager.generateMap();
-        gameMap = mapManager.getMap();
+        // Defining Variables
+        RESOURCE_DEBUG_TOGGLE = true;
 
-
-        cameraSpeed = 24f;
-        cameraZoom = 0.2f;
-        TILE_WIDTH = 128f;
-        TILE_HEIGHT = 64f;
-
+        // Textures
         groundTexture = new Texture("forest/ForestSoil.png");
         waterTexture = new Texture("water/Water.png");
         rockTexture = new Texture("rock/Rock.png");
         wallTexture = new Texture("BlankTile.png");
-        spriteBatch = new SpriteBatch();
-        viewport = new OrthographicCamera(16, 16);
+
+        coalDebugTexture = new Texture("BlankTile.png");
+        copperDebugTexture = new Texture("BlankTileOrange.png");
+
+        // Run Code and stuff IDK
+
+        mapManager.generateMap();
+        gameMap = mapManager.getMap();
+        Gdx.input.setInputProcessor(cameraManager);
 
         viewport.update();
     }
@@ -70,7 +80,7 @@ public class Main implements ApplicationListener {
     @Override
     public void render(){
 
-        update(Gdx.graphics.getDeltaTime());
+        cameraManager.update(Gdx.graphics.getDeltaTime());
         draw();
 
     }
@@ -89,23 +99,10 @@ public class Main implements ApplicationListener {
     public void dispose() {
         // Destroy application's resources here.
         spriteBatch.dispose();
-    }
-
-    public void update(float delta){
-        if (Gdx.input.isKeyPressed(Input.Keys.A)){
-            viewport.position.x -= cameraSpeed * delta;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.D)){
-            viewport.position.x += cameraSpeed * delta;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.W)){
-            viewport.position.y += cameraSpeed * delta;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.S)){
-            viewport.position.y -= cameraSpeed * delta;
-        }
-
-        viewport.update();
+        groundTexture.dispose();
+        waterTexture.dispose();
+        wallTexture.dispose();
+        rockTexture.dispose();
     }
 
     public void draw(){
@@ -118,23 +115,38 @@ public class Main implements ApplicationListener {
         for (int x = 0; x < 120; x++) {
             for (int y = 0; y < 120; y++) {
 
-                float screenX = (x-y) * cameraZoom;
-                float screenY = (x+y) * cameraZoom/2f;
+                float screenX = (x-y) * TILE_W / 2f;
+                float screenY = (x+y) * TILE_H / 2f;
 
                 float TileHeight = gameMap[x][y].getStats().getTileHeight();
 
+                Texture tex = groundTexture;
                 if (TileHeight == 0) {
-                    spriteBatch.draw(waterTexture,screenX ,screenY, cameraZoom*2f, cameraZoom);
-                }
-                if (TileHeight == 1) {
-                    spriteBatch.draw(groundTexture,screenX ,screenY, cameraZoom*2f, cameraZoom);
+                    tex = waterTexture;
                 }
                 if (TileHeight == 2) {
-                    spriteBatch.draw(rockTexture,screenX ,screenY, cameraZoom*2f, cameraZoom);
+                    tex = rockTexture;
                 }
 
+                spriteBatch.draw(tex,screenX ,screenY, TILE_W, TILE_H);
 
-//                System.out.println(gameMap[x][y].getStats().getTileHeight());
+                if (RESOURCE_DEBUG_TOGGLE) {
+                    ResourceNode[] tileResourceNodes = gameMap[x][y].getStats().getResourceNodes();
+                    if (tileResourceNodes.length > 0){
+                        for (int i = 0; i < tileResourceNodes.length; i++) {
+                            if (tileResourceNodes[i].getResourceType() == ResourceNode.ResourceType.Coal) {
+
+//                                spriteBatch.setColor(1, 1, 1, tileResourceNodes[i].getResourceAmount());
+                                spriteBatch.draw(coalDebugTexture, screenX, screenY, TILE_W, TILE_H);
+                            }
+
+                            if (tileResourceNodes[i].getResourceType() == ResourceNode.ResourceType.Copper) {
+//                                spriteBatch.setColor(1, 1, 1, tileResourceNodes[i].getResourceAmount());
+                                spriteBatch.draw(copperDebugTexture, screenX, screenY, TILE_W, TILE_H);
+                            }
+                        }
+                    }
+                }
             }
         }
 
