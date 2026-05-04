@@ -3,13 +3,13 @@ package io.github.VaniaDinCahul.SillyColSim.map_handler;
 import java.util.ArrayList;
 
 public class TileStats{
-    private int groundFertility;
+    private float groundFertility;
 //    private int moistureLevel;
     private ArrayList<ResourceNode> resourceNodes = new ArrayList<>();
 //    private int movementCost;
     private float tileHeight;
 
-    public TileStats(int setGroundFertility, float setTileHeight){
+    public TileStats(float setGroundFertility, float setTileHeight){
         this.groundFertility = setGroundFertility;
 //        this.moistureLevel = setMoistureLevel;
 //        this.movementCost = setMovementCost;

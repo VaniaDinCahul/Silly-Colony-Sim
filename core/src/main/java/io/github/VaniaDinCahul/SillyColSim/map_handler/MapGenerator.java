@@ -53,8 +53,20 @@ public class MapGenerator {
         return tempMap;
     }
 
-    public void generateFertilityMap(){
+    public float[][] generateFertilityMap(){
+        noise.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
+        noise.SetFractalType(FastNoiseLite.FractalType.Ridged);
 
+        float[][] tempMap = new float[120][120];
+        for (int x = 0; x < 120; x++)
+        {
+            for (int y = 0; y < 120; y++)
+            {
+                tempMap[x][y] = noise.GetNoise(x, y);
+            }
+        }
+
+        return tempMap;
     }
 
     public void generateMoistureMap(){
@@ -87,6 +99,7 @@ public class MapGenerator {
        double heightmapSeed = changeMapSeed();
        double copperSeed = changeMapSeed();
        double coalSeed = changeMapSeed();
+       double fertilitySeed = changeMapSeed();
 
 
        Tile[][] tempMap = new Tile[width][height];
@@ -97,10 +110,12 @@ public class MapGenerator {
        float[][] copperResourceMap = generateResourceMap();
        setMapSeed((int)coalSeed);
        float[][] coalResourceMap = generateResourceMap();
+       setMapSeed((int)fertilitySeed);
+       float[][] fertilityMap = generateFertilityMap();
 
        for (int x = 0; x < width; x++) {
            for (int y = 0; y < height; y++) {
-               TileStats tileStats = new TileStats(1, heightMap[x][y]);
+               TileStats tileStats = new TileStats(fertilityMap[x][y], heightMap[x][y]);
 
                if (tileStats.getTileHeight() == 1) { // You see?
                    if (copperResourceMap[x][y] > 0.5) {
